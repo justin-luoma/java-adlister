@@ -2,6 +2,8 @@ package com.codeup.adlister.controllers;
 
 import com.codeup.adlister.dao.DaoFactory;
 import com.codeup.adlister.models.User;
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,7 +24,7 @@ public class LoginServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String username = request.getParameter("username");
-        String password = request.getParameter("password");
+        char[] password = request.getParameter("password").toCharArray();
         User user = DaoFactory.getUsersDao().findByUsername(username);
 
         if (user == null) {
@@ -30,7 +32,13 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
-        boolean validAttempt = password.equals(user.getPassword());
+        Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
+        boolean validAttempt;
+        try {
+            validAttempt = argon2.verify(user.getPassword(), password);
+        } finally {
+            argon2.wipeArray(password);
+        }
 
         if (validAttempt) {
             request.getSession().setAttribute("user", user);
