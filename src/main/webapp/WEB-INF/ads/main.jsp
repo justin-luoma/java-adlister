@@ -27,49 +27,87 @@
             </div>
     </c:forEach>
 
-    <div class="col d-flex justify-content-center my-3">
-        <div class="btn-toolbar align-items-center" role="toolbar" aria-label="Pages toolbar">
 
-            <c:if test="${sessionScope.first > 1}" >
-                <div class="btn-group mr-5" role="group">
-                    <button type="button" class="btn btn-secondary" onclick="goToPage(1)">First</button>
+
+        <div class="btn-toolbar row d-flex justify-content-center align-items-center my-3" role="toolbar" aria-label="Pages toolbar">
+            <%--First page button--%>
+            <c:choose>
+                <c:when test="${sessionScope.first > 1}">
+                    <div class="col-2 col-md-1 text-right">
+                        <div class="btn-group" role="group">
+                            <span class="hoverCursor" onclick="goToPage(1)"><i class="fas fa-chevron-left"></i><i class="fas fa-chevron-left"></i></span>
+                        </div>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="col-2 col-md-1">
+                    </div>
+                </c:otherwise>
+            </c:choose>
+
+            <%--Previous button--%>
+                <c:choose>
+                    <c:when test="${sessionScope.page != 1}">
+                        <div class="col-1">
+                            <div class="btn-group" role="group">
+                                <span class="fas fa-chevron-left hoverCursor" onclick="goToPage(${sessionScope.page - 1})"></span>
+                            </div>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="col-1">
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+
+            <%--Pages button group--%>
+                <div class="col-6 col-md-3 d-flex justify-content-center">
+                <div class="btn-group" role="group">
+                    <c:forEach  var="page" begin="${sessionScope.first}" end="${sessionScope.last}">
+                        <c:choose>
+                            <c:when test="${sessionScope.page == page}">
+                                <button type="button" class="btn btn-link px-1 disabled" onclick="goToPage(${page})">${page}</button>
+                            </c:when>
+                            <c:otherwise>
+                                <button type="button" class="btn btn-link px-1" onclick="goToPage(${page})">${page}</button>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
                 </div>
-            </c:if>
-
-            <c:if test="${sessionScope.page != 1}" >
-                <div class="btn-group mr-5" role="group">
-                    <span class="fas fa-chevron-left hoverCursor" onclick="goToPage(${sessionScope.page - 1})"></span>
                 </div>
-            </c:if>
 
-            <div class="btn-group mx-2" role="group">
+            <%--Next page button--%>
+                <c:choose>
+                    <c:when test="${sessionScope.page != sessionScope.pages}">
+                        <div class="col-1 text-right">
+                            <div class="btn-group" role="group">
+                                <span class="fas fa-chevron-right hoverCursor" onclick="goToPage(${sessionScope.page + 1})"></span>
+                            </div>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="col-1">
+                        </div>
+                    </c:otherwise>
+                </c:choose>
 
-                <c:forEach  var="page" begin="${sessionScope.first}" end="${sessionScope.last}">
-                    <c:choose>
-                        <c:when test="${sessionScope.page == page}">
-                            <button type="button" class="btn btn-link disabled" onclick="goToPage(${page})">${page}</button>
-                        </c:when>
-                        <c:otherwise>
-                            <button type="button" class="btn btn-link" onclick="goToPage(${page})">${page}</button>
-                        </c:otherwise>
-                    </c:choose>
-                </c:forEach>
-
+            <%--Last page button--%>
+                <c:choose>
+                    <c:when test="${sessionScope.last < sessionScope.pages}">
+                        <div class="col-2 col-md-1">
+                            <div class="btn-group" role="group">
+                                <span class="hoverCursor" onclick="goToPage(${sessionScope.pages})"><i class="fas fa-chevron-right"></i><i class="fas fa-chevron-right"></i></span>
+                            </div>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="col-2 col-md-1">
+                        </div>
+                    </c:otherwise>
+                </c:choose>
             </div>
 
-            <c:if test="${sessionScope.page != sessionScope.pages}" >
-                <div class="btn-group ml-5" role="group">
-                    <span class="fas fa-chevron-right hoverCursor" onclick="goToPage(${sessionScope.page + 1})"></span>
-                </div>
-            </c:if>
 
-            <c:if test="${sessionScope.last < sessionScope.pages}" >
-                <div class="btn-group ml-5" role="group">
-                    <button type="button" class="btn btn-secondary" onclick="goToPage(${sessionScope.pages})">Last</button>
-                </div>
-            </c:if>
-        </div>
-    </div>
 </div>
 
 <script src="/static/ads.js"></script>
