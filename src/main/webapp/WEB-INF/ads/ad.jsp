@@ -3,7 +3,7 @@
 
 <html>
 <head>
-    <jsp:include page="/WEB-INF/assests/head.jsp">
+    <jsp:include page="../assests/head.jsp">
         <jsp:param name="title" value="Adlister" />
     </jsp:include>
 </head>
@@ -12,23 +12,23 @@
 <%@ include file="/WEB-INF/navbar/navbar.jsp" %>
 
 <div class="container" id="content">
-    <h1>Welcome, <c:out value="${sessionScope.user.username()}"/></h1>
-    <c:forEach var="ad" items="${ads}">
-
             <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <h2><c:out value="${ad.title()}" /></h2>
+                    <span>Created by: <c:out value="${user_info}" default="test_user" /></span>
+                </div>
                 <div class="card-body">
-                    <h5 class="card-title"><c:out value="${ad.title()}" /></h5>
-                    <h6 class="card-subtitle mb-2 text-muted"><c:out value="${ad.created()}" /></h6>
+                    <%--<h5 class="card-title">${ad.title()}</h5>--%>
+                    <%--<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>--%>
                     <p class="card-text"><c:out value="${ad.description()}" /></p>
                 </div>
                 <div class="card-footer d-flex justify-content-between p-1">
-                    <span class="align-text-bottom">categories: </span>
-                    <button type="button" class="btn btn-success btn-sm">View</button>
+                    <span>categories: <c:out value="${ad_info}" default="test_category" /></span>
+                    <span>created: <c:out value="${ad.created().toString()}"/></span>
+                    <%--<button type="button" class="btn btn-success btn-sm">View</button>--%>
                 </div>
             </div>
-    </c:forEach>
 </div>
-
 
 <jsp:include page="/WEB-INF/assests/scripts.jsp">
     <jsp:param name="logged_in" value="${sessionScope.logged_in}" />
