@@ -20,7 +20,8 @@ CREATE TABLE categories
  id   INT UNSIGNED NOT NULL AUTO_INCREMENT ,
  name VARCHAR(15) NOT NULL ,
 
-PRIMARY KEY (id)
+PRIMARY KEY (id),
+UNIQUE (name)
 );
 
 -- ************************************** users
@@ -48,6 +49,7 @@ CREATE TABLE ads
  created     DATETIME NOT NULL,
 
 PRIMARY KEY (id),
+UNIQUE (title),
 FOREIGN KEY (created_by) REFERENCES users(id)
     ON DELETE CASCADE,
 FULLTEXT INDEX FT_TD (title, description),
@@ -61,6 +63,7 @@ CREATE TABLE ad_category
 (
  category_id INT UNSIGNED NOT NULL ,
  ad_id       INT UNSIGNED NOT NULL ,
+UNIQUE KEY `U_AC` (`ad_id`,`category_id`),
 FOREIGN KEY (ad_id) REFERENCES ads(id)
     ON DELETE CASCADE,
 FOREIGN KEY (category_id) REFERENCES categories(id)
@@ -72,7 +75,13 @@ INSERT INTO categories (name) VALUES
     ('video games'),
     ('appliances'),
     ('freelancer'),
-    ('cell phones');
+    ('cell phones'),
+    ('clothes'),
+    ('for sale'),
+    ('computers'),
+    ('pc'),
+    ('books'),
+    ('job');
 
 insert into users (username, email, password) values
     ('user1', 'user1@example.com', '$argon2id$v=19$m=65536,t=63,p=4$gUUXzHtpfCW6B1gHZu1CTg$gcM5/pBsW7oPvft8yZp8oA12RnPafNIRx+uPb0y7nbM'),
@@ -85,3 +94,13 @@ insert into ads (created_by, title, description, created) values
     (2, 'Junior Java Developer Position',
      'Minimum 7 years of experience required. You will be working in the scripting language for Java, JavaScript', '2018-09-10 09:01:00'),
     (3, 'JavaScript Developer needed', 'Must have strong Java skills', '2018-01-01 21:00:59');
+
+insert into ad_category (ad_id, category_id) select 1 as ad_id, 2 as category_id;
+insert into ad_category (ad_id, category_id) select 1 as ad_id, 7 as category_id;
+insert into ad_category (ad_id, category_id) select 2 as ad_id, 2 as category_id;
+insert into ad_category (ad_id, category_id) select 2 as ad_id, 7 as category_id;
+
+insert into ad_category (ad_id, category_id) select 3 as ad_id, 4 as category_id;
+insert into ad_category (ad_id, category_id) select 3 as ad_id, 11 as category_id;
+insert into ad_category (ad_id, category_id) select 4 as ad_id, 2 as category_id;
+insert into ad_category (ad_id, category_id) select 4 as ad_id, 11 as category_id;

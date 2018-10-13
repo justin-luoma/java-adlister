@@ -25,3 +25,7 @@ const keypressHandler = event => {
 
 document.addEventListener('click', clickHandler);
 document.addEventListener('keypress', keypressHandler);
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById("username").focus();
+});

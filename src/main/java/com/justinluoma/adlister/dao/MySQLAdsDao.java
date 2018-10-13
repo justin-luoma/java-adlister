@@ -1,5 +1,6 @@
 package com.justinluoma.adlister.dao;
 
+import com.justinluoma.adlister.dao.interfaces.Ads;
 import com.justinluoma.adlister.models.Ad;
 import com.mysql.cj.jdbc.Driver;
 
@@ -27,6 +28,18 @@ public class MySQLAdsDao implements Ads {
     public List<Ad> all() {
         try {
             PreparedStatement stmt = connection.prepareStatement("SELECT * FROM ads ORDER BY created DESC");
+            ResultSet rs = stmt.executeQuery();
+            return createAdsFromResults(rs);
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving all ads.", e);
+        }
+    }
+
+    @Override
+    public List<Ad> all(Long userID) {
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM ads WHERE id != ? ORDER BY created DESC");
+            stmt.setLong(1, userID);
             ResultSet rs = stmt.executeQuery();
             return createAdsFromResults(rs);
         } catch (SQLException e) {
@@ -112,24 +125,40 @@ public class MySQLAdsDao implements Ads {
     }
 
     @Override
-    public Boolean delete(Long id) {
-        String query = "DELETE FROM ads WHERE id = ?";
+    public Boolean delete(Long userID, Long adID) {
         try {
-            PreparedStatement stmt = connection.prepareStatement(query);
-            stmt.setLong(1, id);
-            return stmt.execute();
+            Ad ad = getFromID(adID);
+            if (ad.createdBy() == userID) {
+                delete(adID);
+                return true;
+            }
+            return false;
         } catch (SQLException e) {
-            throw new RuntimeException("Error deleting ad from database", e);
+            return false;
         }
     }
 
+    private Boolean delete(Long id) throws SQLException {
+        String query = "DELETE FROM ads WHERE id = ?";
+        PreparedStatement stmt = connection.prepareStatement(query);
+        stmt.setLong(1, id);
+        return stmt.execute();
+    }
+
+    @Override
+    public List<Ad> getByCategory(Long categoryID) {
+        return null;
+    }
+
     private Ad extractAd(ResultSet rs) throws SQLException {
+        long id = rs.getLong("id");
         return new Ad(
-            rs.getLong("id"),
-            rs.getLong("created_by"),
-            rs.getString("title"),
-            rs.getString("description"),
-            rs.getTimestamp("created")
+                id,
+                rs.getLong("created_by"),
+                rs.getString("title"),
+                rs.getString("description"),
+                rs.getTimestamp("created"),
+                getAdCategories(id)
         );
     }
 
@@ -139,5 +168,22 @@ public class MySQLAdsDao implements Ads {
             ads.add(extractAd(rs));
         }
         return ads;
+    }
+
+    private List<String> createCategoriesFromResults(ResultSet rs) throws SQLException {
+        List<String> categories = new ArrayList<>();
+        while (rs.next()) {
+            categories.add(rs.getString("category"));
+        }
+        return categories;
+    }
+
+    private List<String> getAdCategories(Long id) throws SQLException {
+        String query = "SELECT c.name AS category FROM ad_category ac " +
+                "JOIN categories c ON ac.category_id = c.id " +
+                "WHERE ad_id = ?";
+        PreparedStatement stmt = connection.prepareStatement(query);
+        stmt.setLong(1, id);
+        return createCategoriesFromResults(stmt.executeQuery());
     }
 }

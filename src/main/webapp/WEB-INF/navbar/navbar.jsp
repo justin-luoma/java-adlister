@@ -19,7 +19,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="ads">Ads <span class="caret"></span></a>
                     <div class="dropdown-menu" aria-labelledby="ads">
-                        <a class="dropdown-item not-logged-in" href="">My Listings</a>
+                        <a class="dropdown-item not-logged-in" href="/profile/ads">My Listings</a>
                         <a class="dropdown-item not-logged-in" href="">Create New Listing</a>
                         <div class="dropdown-divider not-logged-in"></div>
                         <a class="dropdown-item" href="/ads">View All</a>
@@ -50,10 +50,11 @@
                         <a class="dropdown-item" href="/theme?theme=simplex">Simplex</a>
                         <a class="dropdown-item" href="/theme?theme=solar">Solar</a>
                         <a class="dropdown-item" href="/theme?theme=slate">Slate</a>
+                        <a class="dropdown-item" href="/theme?theme=sketchy">Sketchy</a>
                         <a class="dropdown-item" href="/theme?theme=spacelab">Spacelab</a>
                         <a class="dropdown-item" href="/theme?theme=superhero">Superhero</a>
                         <a class="dropdown-item" href="/theme?theme=united">United</a>
-                        <a class="dropdown-item" href="/theme?theme=yeti">Yeti</a>
+                        <%--<a class="dropdown-item" href="/theme?theme=yeti">Yeti</a>--%>
                     </div>
                 </li>
                 <%--<li class="nav-item">--%>

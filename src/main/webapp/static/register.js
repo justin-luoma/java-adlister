@@ -89,7 +89,6 @@ const inputHandler = event => {
 const clickHandler = event => {
     const t = event.target;
     if(t.id === "submit" && !t.classList.contains("disabled")) {
-        console.log(t.id);
         document.getElementById("register-form").submit();
     }
 };

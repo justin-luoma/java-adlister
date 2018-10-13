@@ -1,5 +1,6 @@
 package com.justinluoma.adlister.dao;
 
+import com.justinluoma.adlister.dao.interfaces.Users;
 import com.justinluoma.adlister.models.User;
 import com.mysql.cj.jdbc.Driver;
 

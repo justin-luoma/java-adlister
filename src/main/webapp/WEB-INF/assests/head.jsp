@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <c:choose>
     <c:when test="${sessionScope.theme == 'default' || sessionScope.theme == null}">
-        <link rel="stylesheet" href="/static/sketchy.css" >
+        <link rel="stylesheet" href="/static/yeti.css" >
     </c:when>
 
     <c:otherwise>

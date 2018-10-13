@@ -1,6 +1,8 @@
 package com.justinluoma.adlister.dao;
 
 import com.google.gson.Gson;
+import com.justinluoma.adlister.dao.interfaces.Ads;
+import com.justinluoma.adlister.dao.interfaces.Users;
 
 public class DaoFactory {
     private static Ads adsDao;

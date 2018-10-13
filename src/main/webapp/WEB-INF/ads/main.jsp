@@ -21,7 +21,16 @@
                     <p class="card-text"><c:out value="${ad.description()}" /></p>
                 </div>
                 <div class="card-footer d-flex justify-content-between p-1">
-                    <span class="align-text-bottom">categories: </span>
+                    <span class="align-text-bottom">categories:
+                        <c:if test="${ad.categories() != null}" >
+                            <c:forEach var="category" items="${ad.categories()}" varStatus="i">
+                                <c:out value="${category.concat(!i.last ? ', ': '')}" />
+                                <%--<c:if test="${not i.last}">--%>
+                                    <%--,--%>
+                                <%--</c:if>--%>
+                            </c:forEach>
+                        </c:if>
+                    </span>
                     <button type="button" class="btn btn-success btn-sm" onclick="window.location='<c:out value="/ad/${ad.id()}" />'">View</button>
                 </div>
             </div>
@@ -78,7 +87,7 @@
 
             <%--Next page button--%>
                 <c:choose>
-                    <c:when test="${sessionScope.page != sessionScope.pages}">
+                    <c:when test="${sessionScope.page < sessionScope.pages}">
                         <div class="col-1 text-right">
                             <div class="btn-group" role="group">
                                 <span class="fas fa-chevron-right hoverCursor" onclick="goToPage(${sessionScope.page + 1})"></span>
@@ -109,6 +118,8 @@
 
 
 </div>
+
+<jsp:include page="/WEB-INF/ads/js/location.jsp" />
 
 <script src="/static/ads.js"></script>
 

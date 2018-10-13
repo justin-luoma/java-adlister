@@ -28,10 +28,10 @@ public class ThemeServlet extends HttpServlet {
             "simplex",
             "solar",
             "slate",
+            "sketchy",
             "spacelab",
             "superhero",
-            "united",
-            "yeti"
+            "united"
     };
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 

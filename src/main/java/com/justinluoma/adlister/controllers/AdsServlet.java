@@ -24,10 +24,10 @@ public class AdsServlet extends HttpServlet {
         HttpSession session = request.getSession();
         if(session.getAttribute("user") != null)
             session.setAttribute("logged_in", true);
-        else {
+        else
             request.getSession().setAttribute("logged_in", false);
-            session.setAttribute("redirect", "/ads");
-        }
+
+        session.setAttribute("redirect", "/ads");
 
         List<Ad> ads;
         if (session.getAttribute("ads") instanceof List && ((List) session.getAttribute("ads")).get(0) instanceof Ad)
@@ -38,16 +38,25 @@ public class AdsServlet extends HttpServlet {
         session.setAttribute("ads", ads);
 
         Integer page = (Integer)session.getAttribute("page");
-        page = page == null || page > ads.size() ? 1 : page;
         int pages = (int)Math.ceil((double)(ads.size() / resultsPerPage));
+        page = page == null || page > pages ? 1 : page;
         int start = (page - 1) * resultsPerPage;
 
-        session.setAttribute("pagedResults", ads.subList(start, start + resultsPerPage));
+        session.setAttribute("pagedResults", ads.subList(start,
+                (start + resultsPerPage) > ads.size() ? ads.size() : start + resultsPerPage));
         session.setAttribute("pages", pages);
         session.setAttribute("page", page);
-        int last = Paging.doPaging(page, pagesToShow, pages);
+        int last;
+        int first;
+        if (pages < pagesToShow) {
+            last = pages;
+            first = 1;
+        } else {
+            last = Paging.doPaging(page, pagesToShow, pages);
+            first = last - pagesToShow + 1;
+        }
         session.setAttribute("last", last);
-        session.setAttribute("first", last - pagesToShow + 1);
+        session.setAttribute("first", first);
 
         request.getRequestDispatcher("/WEB-INF/ads/main.jsp").forward(request, response);
     }

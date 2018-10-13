@@ -1,4 +1,4 @@
-package com.justinluoma.adlister.dao;
+package com.justinluoma.adlister.dao.interfaces;
 
 import com.justinluoma.adlister.models.User;
 

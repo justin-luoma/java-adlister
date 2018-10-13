@@ -49,10 +49,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     $('.modal').on('show.bs.modal', function (e) {
-        $('.modal .modal-dialog').attr('class', 'modal-dialog  slideInRight  animated search-dialog');
+        $('.modal .search-dialog').attr('class', 'modal-dialog  slideInRight  animated search-dialog');
     })
     $('.modal').on('hide.bs.modal', function (e) {
-        $('.modal .modal-dialog').attr('class', 'modal-dialog  slideOutRight  animated search-dialog');
+        $('.modal .search-dialog').attr('class', 'modal-dialog  slideOutRight  animated search-dialog');
         document.getElementById("navbarSearch").value = document.getElementById("searchInput").value;
     })
 });

@@ -13,17 +13,12 @@
         </c:otherwise>
     </c:choose>
 
-    (() => {
-        console.log("${sessionScope.redirect}");
-    })();
-
 for(elem of hide) {
 elem.style.display = "none";
 }
 
 document.addEventListener('DOMContentLoaded', function () {
     const navHeight = $('#navbar').outerHeight();
-    console.log("calc (" + navHeight + "px + 1rem)");
     $('#content').css("margin-top", "calc(" + navHeight + "px + 1rem)");
 });
 </script>

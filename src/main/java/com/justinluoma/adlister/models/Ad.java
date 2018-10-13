@@ -2,6 +2,9 @@ package com.justinluoma.adlister.models;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class Ad implements Comparable<Ad> {
     private long id;
@@ -9,7 +12,41 @@ public class Ad implements Comparable<Ad> {
     private String title;
     private String description;
     private LocalDateTime created;
+    private List<String> categories;
 
+    public Ad(long id, long createdBy, String title, String description,
+              Timestamp created, String... categories) {
+        this.id = id;
+        this.createdBy = createdBy;
+        this.title = title;
+        this.description = description;
+        this.created = created.toLocalDateTime();
+        this.categories = Arrays.asList(categories);
+        Collections.sort(this.categories);
+    }
+
+    public Ad(long id, long createdBy, String title, String description,
+              Timestamp created, List<String> categories) {
+        this.id = id;
+        this.createdBy = createdBy;
+        this.title = title;
+        this.description = description;
+        this.created = created.toLocalDateTime();
+        this.categories = categories;
+        Collections.sort(this.categories);
+    }
+
+    public Ad(long createdBy, String title, String description, String... categories) {
+        this.createdBy = createdBy;
+        this.title = title;
+        this.description = description;
+        this.categories = Arrays.asList(categories);
+        Collections.sort(this.categories);
+        this.created = null;
+        this.id = 0;
+    }
+
+//    Temp
     public Ad(long id, long createdBy, String title, String description,
               Timestamp created) {
         this.id = id;
@@ -18,7 +55,6 @@ public class Ad implements Comparable<Ad> {
         this.description = description;
         this.created = created.toLocalDateTime();
     }
-
     public Ad(long createdBy, String title, String description) {
         this.createdBy = createdBy;
         this.title = title;
@@ -65,6 +101,20 @@ public class Ad implements Comparable<Ad> {
 
     public void created(LocalDateTime created) {
         this.created = created;
+    }
+
+    public List<String> categories() {
+        return categories;
+    }
+
+    public void categories(List<String> categories) {
+        this.categories = categories;
+        Collections.sort(this.categories);
+    }
+
+    public void categories(String... categories) {
+        this.categories = Arrays.asList(categories);
+        Collections.sort(this.categories);
     }
 
     @Override
