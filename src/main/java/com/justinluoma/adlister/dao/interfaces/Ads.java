@@ -14,4 +14,5 @@ public interface Ads {
     Ad getFromID(Long id) throws SQLException;
     Long insert(Ad ad);
     Boolean delete(Long userID, Long adID);
+    Boolean testUniqueTitle(String title);
 }

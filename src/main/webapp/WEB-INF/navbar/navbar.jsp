@@ -20,7 +20,7 @@
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="ads">Ads <span class="caret"></span></a>
                     <div class="dropdown-menu" aria-labelledby="ads">
                         <a class="dropdown-item not-logged-in" href="/profile/ads">My Listings</a>
-                        <a class="dropdown-item not-logged-in" href="">Create New Listing</a>
+                        <a class="dropdown-item not-logged-in" href="/create">Create New Listing</a>
                         <div class="dropdown-divider not-logged-in"></div>
                         <a class="dropdown-item" href="/ads">View All</a>
                         <div class="dropdown-divider"></div>

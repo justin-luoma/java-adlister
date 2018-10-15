@@ -1,6 +1,6 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <jsp:include page="/WEB-INF/assests/head.jsp">
@@ -51,7 +51,7 @@
 
 <script src="/static/login.js"></script>
 
-<jsp:include page="assests/scripts.jsp">
+<jsp:include page="/WEB-INF/assests/scripts.jsp">
     <jsp:param name="logged_in" value="${sessionScope.logged_in}" />
 </jsp:include>
 

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MySQLAdsDao implements Ads {
-    private Connection connection = null;
+    private Connection connection;
 
     MySQLAdsDao(Config config) {
         try {
@@ -148,6 +148,18 @@ public class MySQLAdsDao implements Ads {
     @Override
     public List<Ad> getByCategory(Long categoryID) {
         return null;
+    }
+
+    @Override
+    public Boolean testUniqueTitle(String title) {
+        String query = "SELECT id FROM ads WHERE title = ?";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, title);
+            return (stmt.executeQuery().next());
+        } catch (SQLException e) {
+            throw new RuntimeException("Error searching for unique title", e);
+        }
     }
 
     private Ad extractAd(ResultSet rs) throws SQLException {
