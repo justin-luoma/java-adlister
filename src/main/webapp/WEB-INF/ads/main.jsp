@@ -13,7 +13,6 @@
 
 <div class="container" id="content">
     <c:forEach var="ad" items="${sessionScope.pagedResults}">
-
             <div class="card mt-1">
                 <div class="card-body">
                     <h5 class="card-title"><c:out value="${ad.title()}" /></h5>
@@ -21,16 +20,16 @@
                     <p class="card-text"><c:out value="${ad.description()}" /></p>
                 </div>
                 <div class="card-footer d-flex justify-content-between p-1">
-                    <span class="align-text-bottom">categories:
-                        <c:if test="${ad.categories() != null}" >
-                            <c:forEach var="category" items="${ad.categories()}" varStatus="i">
-                                <c:out value="${category.concat(!i.last ? ', ': '')}" />
-                                <%--<c:if test="${not i.last}">--%>
-                                    <%--,--%>
-                                <%--</c:if>--%>
-                            </c:forEach>
+                        <c:if test="${ad.categories().size() != 0}" >
+                            <span class="align-text-bottom">categories:
+                                <c:forEach var="category" items="${ad.categories()}" varStatus="i">
+                                    <c:out value="${category.concat(!i.last ? ', ': '')}" />
+                                    <%--<c:if test="${not i.last}">--%>
+                                        <%--,--%>
+                                    <%--</c:if>--%>
+                                </c:forEach>
+                            </span>
                         </c:if>
-                    </span>
                     <button type="button" class="btn btn-success btn-sm" onclick="window.location='<c:out value="/ad/${ad.id()}" />'">View</button>
                 </div>
             </div>

@@ -48,7 +48,7 @@ const editInputHandler = event => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-        $('#updateAd').popover();
+        $('#updateAd').popover({trigger: 'manual'});
         document.getElementById("updateAd").addEventListener("click", (e) => {
             e.preventDefault();
             const title = document.getElementById("title");
@@ -102,15 +102,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
 
-            fetch(`/profile/ad/${adID}`,
+            fetch(`/profile/ad/${window.adID}`,
                 {
                     "method": "post",
                     "headers": {"Content-Type": "application/x-www-form-urlencoded"},
                     "body": urlParams,
                 }).then(response => response.ok ? response.json(): new Error(response.statusCode))
                 .then(json => {
-                    console.log(json);
-                    json.errors ? new Error(json) : window.location = `/profile/ad/${json.success}`
+                    json.errors ? new Error(json) : window.location=`/profile/ad/${window.adID}`
                 })
                 .catch(error => console.log(error));
         });

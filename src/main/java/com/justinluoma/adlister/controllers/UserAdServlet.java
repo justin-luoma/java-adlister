@@ -2,6 +2,7 @@ package com.justinluoma.adlister.controllers;
 
 import com.justinluoma.adlister.controllers.util.CompareCategories;
 import com.justinluoma.adlister.controllers.util.Json;
+import com.justinluoma.adlister.controllers.util.ValidateCategories;
 import com.justinluoma.adlister.dao.DaoFactory;
 import com.justinluoma.adlister.models.Ad;
 import com.justinluoma.adlister.models.AdCategory;
@@ -19,6 +20,7 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @WebServlet(name = "UserAdServlet", urlPatterns = "/profile/ad/*")
 public class UserAdServlet extends HttpServlet {
@@ -58,19 +60,57 @@ public class UserAdServlet extends HttpServlet {
             Ad ad = extractAd(path, response);
             if (ad == null) return;
 
-            List<AdCategory> ac = DaoFactory.getAdCategoriesDao().byAdID(ad.id());
-            if (title == null || description == null || categories == null) {
+            if (ad.createdBy() != user.id()) {
+                response.sendRedirect("/403");
+                return;
+            }
+
+            if (title == null & description == null & categories.length < 1) {
                 out.println(DaoFactory.gson.toJson(Json.gen(new String[]{"errors"}, "nothing to update")));
                 out.flush();
-            } else if (ad.title().equals(title)
-                    & ad.description().equals(description)
-                    & CompareCategories.compare(
-                            ac.stream().map(c -> c.categoryID().toString()).collect(Collectors.toList()),
-                    categories)) {
+                return;
+            }
+
+            List<Long> newCatIDs;
+            try {
+                newCatIDs = Stream.of(categories).map(Long::valueOf).collect(Collectors.toList());
+            } catch (NumberFormatException e) {
+                out.println(DaoFactory.gson.toJson(Json.gen(new String[]{"errors"}, "invalid categories")));
+                out.flush();
+                return;
+            }
+
+            if (!ValidateCategories.validate(newCatIDs)) {
+                out.println(DaoFactory.gson.toJson(Json.gen(new String[]{"errors"}, "invalid categories")));
+                out.flush();
+                return;
+            }
+
+            List<AdCategory> ac = DaoFactory.getAdCategoriesDao().byAdID(ad.id());
+            List<String> catStringIDs = ac.stream().map(c -> c.categoryID().toString()).collect(Collectors.toList());
+
+
+            if (ad.title().equals(title) & ad.description().equals(description) & CompareCategories.compare(catStringIDs, categories)) {
                 out.println(DaoFactory.gson.toJson(Json.gen(new String[]{"errors"}, "nothing to update")));
                 out.flush();
             } else {
-
+                if ((!ad.title().equals(title) && title != null) || (!ad.description().equals(description) && description != null)) {
+                    Ad updateAd = new Ad();
+                    if (!ad.title().equals(title)) {
+                        updateAd.title(title);
+                    }
+                    if (!ad.description().equals(description)) {
+                        updateAd.description(description);
+                    }
+                    DaoFactory.getAdsDao().update(ad.id(), updateAd);
+                }
+                List<Long> acIDs = ac.stream().map(AdCategory::categoryID).collect(Collectors.toList());
+                if (!CompareCategories.compare(catStringIDs, categories)) {
+                    DaoFactory.getAdsDao().updateCategories(ad.id(), acIDs, newCatIDs);
+                }
+                session.setAttribute("editing", false);
+                out.println(DaoFactory.gson.toJson(Json.gen(new String[] {"errors"}, false)));
+                out.flush();
             }
         }
     }
@@ -99,6 +139,8 @@ public class UserAdServlet extends HttpServlet {
             response.sendRedirect("/403");
             return;
         }
+
+        session.setAttribute("editing", request.getHeader("referer").endsWith("/profile/ads"));
 
         session.setAttribute("ad", ad);
 

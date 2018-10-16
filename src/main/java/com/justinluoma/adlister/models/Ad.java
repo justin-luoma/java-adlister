@@ -13,17 +13,21 @@ public class Ad implements Comparable<Ad> {
     private String description;
     private LocalDateTime created;
     private List<String> categories;
+    private List<Integer> categoryIDs;
 
-    public Ad(long id, long createdBy, String title, String description,
-              Timestamp created, String... categories) {
-        this.id = id;
-        this.createdBy = createdBy;
-        this.title = title;
-        this.description = description;
-        this.created = created.toLocalDateTime();
-        this.categories = Arrays.asList(categories);
-        Collections.sort(this.categories);
+    public Ad() {
     }
+
+//    public Ad(long id, long createdBy, String title, String description,
+//              Timestamp created, String... categories) {
+//        this.id = id;
+//        this.createdBy = createdBy;
+//        this.title = title;
+//        this.description = description;
+//        this.created = created.toLocalDateTime();
+//        this.categories = Arrays.asList(categories);
+//        Collections.sort(this.categories);
+//    }
 
     public Ad(long id, long createdBy, String title, String description,
               Timestamp created, List<String> categories) {
@@ -36,32 +40,47 @@ public class Ad implements Comparable<Ad> {
         Collections.sort(this.categories);
     }
 
-    public Ad(long createdBy, String title, String description, String... categories) {
-        this.createdBy = createdBy;
-        this.title = title;
-        this.description = description;
-        this.categories = Arrays.asList(categories);
-        Collections.sort(this.categories);
-        this.created = null;
-        this.id = 0;
-    }
+//    public Ad(long createdBy, String title, String description) {
+//        this.createdBy = createdBy;
+//        this.title = title;
+//        this.description = description;
+//        this.created = null;
+//        this.id = 0;
+//    }
+
+//    public Ad(long id, long createdBy, String title, String description,
+//              Timestamp created, List<String> categories, List<Integer> categoryIDs) {
+//        this.id = id;
+//        this.createdBy = createdBy;
+//        this.title = title;
+//        this.description = description;
+//        this.created = created.toLocalDateTime();
+//        this.categories = categories;
+//        this.categoryIDs = categoryIDs;
+//        Collections.sort(this.categories);
+//        Collections.sort(this.categories);
+//    }
+
+//    public Ad(long createdBy, String title, String description, String... categories) {
+//        this.createdBy = createdBy;
+//        this.title = title;
+//        this.description = description;
+//        this.categories = Arrays.asList(categories);
+//        Collections.sort(this.categories);
+//        this.created = null;
+//        this.id = 0;
+//    }
 
 //    Temp
-    public Ad(long id, long createdBy, String title, String description,
-              Timestamp created) {
-        this.id = id;
-        this.createdBy = createdBy;
-        this.title = title;
-        this.description = description;
-        this.created = created.toLocalDateTime();
-    }
-    public Ad(long createdBy, String title, String description) {
-        this.createdBy = createdBy;
-        this.title = title;
-        this.description = description;
-        this.created = null;
-        this.id = 0;
-    }
+//    public Ad(long id, long createdBy, String title, String description,
+//              Timestamp created) {
+//        this.id = id;
+//        this.createdBy = createdBy;
+//        this.title = title;
+//        this.description = description;
+//        this.created = created.toLocalDateTime();
+//    }
+
 
     public long id() {
         return id;
@@ -104,7 +123,7 @@ public class Ad implements Comparable<Ad> {
     }
 
     public List<String> categories() {
-        return categories;
+        return this.categories;
     }
 
     public void categories(List<String> categories) {
@@ -115,6 +134,19 @@ public class Ad implements Comparable<Ad> {
     public void categories(String... categories) {
         this.categories = Arrays.asList(categories);
         Collections.sort(this.categories);
+    }
+
+    public List<Integer> categoryIDs() {
+        return categoryIDs;
+    }
+
+    public void categoryIDs(List<Integer> categoryIDs) {
+        this.categoryIDs = categoryIDs;
+    }
+
+    public void categoryIDs(Integer... categoryIDs) {
+        this.categoryIDs = Arrays.asList(categoryIDs);
+        Collections.sort(this.categoryIDs);
     }
 
     @Override

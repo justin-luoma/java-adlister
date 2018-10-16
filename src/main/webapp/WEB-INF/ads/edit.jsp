@@ -1,8 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<c:set var="editing" value="${!header['referer'].endsWith('create')}" scope="session" />
-
 <html>
 <head>
     <jsp:include page="../assests/head.jsp">
@@ -175,7 +173,7 @@
     const initialTitle = '<c:out value="${ad.title()}"/>';
     const initialDescription = '<c:out value="${ad.description()}"/>';
     const initialCategories = temp;
-    const adID = '${sessionScope.ad.id()}'
+    window.adID = '${sessionScope.ad.id()}'
 </script>
 
 <jsp:include page="/WEB-INF/ads/partials/deleteModal.jsp" />

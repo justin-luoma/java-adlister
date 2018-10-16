@@ -24,4 +24,12 @@ public class ValidateCategories {
         }
         return valid;
     }
+
+    public static boolean validate(List<Long> categories) {
+        boolean valid = true;
+        for (Long c:categories) {
+            valid = validate(c) && valid;
+        }
+        return valid;
+    }
 }

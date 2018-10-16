@@ -2,6 +2,7 @@ package com.justinluoma.adlister.controllers;
 
 import com.justinluoma.adlister.controllers.util.Json;
 import com.justinluoma.adlister.controllers.util.Paging;
+import com.justinluoma.adlister.controllers.util.Sublist;
 import com.justinluoma.adlister.dao.DaoFactory;
 import com.justinluoma.adlister.models.Ad;
 import com.justinluoma.adlister.models.User;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "AdsUserServlet", urlPatterns = "/profile/ads")
@@ -35,22 +37,17 @@ public class AdsUserServlet extends HttpServlet {
             return;
         }
 
-        List<Ad> userAds;
-        if ((session.getAttribute("reload") != null && !(boolean)session.getAttribute("reload"))
-                && (session.getAttribute("userAds") instanceof List &&
-                ((List) session.getAttribute("userAds")).get(0) instanceof Ad))
-            userAds = (List<Ad>)session.getAttribute("userAds");
-        else
-            userAds = DaoFactory.getAdsDao().users(user.id());
-
+        List<Ad> userAds = DaoFactory.getAdsDao().users(user.id());
 
         session.setAttribute("userAds", userAds);
         Integer page = (Integer)session.getAttribute("page");
-        int pages = (int)Math.ceil((double)(userAds.size() / resultsPerPage));
+        int pages = (int)Math.ceil((double)userAds.size() / (double)resultsPerPage);
         page = page == null || page > pages ? 1 : page;
         int start = (page - 1) * resultsPerPage;
-        session.setAttribute("pagedResults", userAds.subList(start,
-                (start + resultsPerPage) > userAds.size() ? userAds.size() : start + resultsPerPage));
+
+        List<Ad> pagedResults = userAds.size() != 0 ? userAds.subList(start, (start + resultsPerPage) > userAds.size() ? userAds.size() : start + resultsPerPage) : new ArrayList<>();
+//        List<Ad> pagedResults = Sublist.get(userAds, start, resultsPerPage);
+        session.setAttribute("pagedResults", pagedResults);
         session.setAttribute("pages", pages);
         session.setAttribute("page", page);
         int last;

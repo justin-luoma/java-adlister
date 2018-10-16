@@ -49,12 +49,7 @@ public class CreateAdServlet extends HttpServlet {
             valid = ValidateCategories.validate(categories) && valid;
 
             if (valid) {
-                long adID = DaoFactory.getAdsDao().insert(
-                        new Ad(
-                                user.id(),
-                                title,
-                                description)
-                );
+                long adID = DaoFactory.getAdsDao().insert(user.id(), title, description);
                 for(String category: categories) {
                     try {
                         long catID = Long.valueOf(category);
@@ -63,10 +58,11 @@ public class CreateAdServlet extends HttpServlet {
                         throw new RuntimeException("Error parsing category id", e);
                     }
                 }
+                session.setAttribute("editing", false);
                 out.println(DaoFactory.gson.toJson(Json.gen(new String[] {"errors", "success"}, false, adID)));
                 out.flush();
             } else {
-                out.println(DaoFactory.gson.toJson(Json.gen(new String[] {"errors", "success"}, true)));
+                out.println(DaoFactory.gson.toJson(Json.gen(new String[] {"errors"}, true)));
                 out.flush();
             }
         }

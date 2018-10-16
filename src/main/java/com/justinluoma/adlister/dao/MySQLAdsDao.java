@@ -3,9 +3,11 @@ package com.justinluoma.adlister.dao;
 import com.justinluoma.adlister.dao.interfaces.Ads;
 import com.justinluoma.adlister.models.Ad;
 import com.mysql.cj.jdbc.Driver;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class MySQLAdsDao implements Ads {
@@ -48,13 +50,13 @@ public class MySQLAdsDao implements Ads {
     }
 
     @Override
-    public Long insert(Ad ad) {
+    public Long insert(Long createdBy, String title, String description) {
         try {
             String insertQuery = "INSERT INTO ads(created_by, title, description, created) VALUES (?, ?, ?, (SELECT NOW()))";
             PreparedStatement stmt = connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS);
-            stmt.setLong(1, ad.createdBy());
-            stmt.setString(2, ad.title());
-            stmt.setString(3, ad.description());
+            stmt.setLong(1, createdBy);
+            stmt.setString(2, title);
+            stmt.setString(3, description);
             stmt.executeUpdate();
             ResultSet rs = stmt.getGeneratedKeys();
             rs.next();
@@ -67,7 +69,7 @@ public class MySQLAdsDao implements Ads {
     @Override
     public List<Ad> users(Long user_id) {
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM ads WHERE created_by = ?");
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM ads WHERE created_by = ? ORDER BY created DESC");
             stmt.setLong(1, user_id);
             ResultSet rs = stmt.executeQuery();
             return createAdsFromResults(rs);
@@ -163,6 +165,35 @@ public class MySQLAdsDao implements Ads {
     }
 
     @Override
+    public void update(Long adID, Ad newAd) {
+        String query;
+        PreparedStatement stmt = null;
+        try {
+            if (newAd.title() != null && newAd.description() != null) {
+                query = "UPDATE ads SET title = ?, description = ? WHERE id = ?";
+                stmt = connection.prepareStatement(query);
+                stmt.setString(1, newAd.title());
+                stmt.setString(2, newAd.description());
+                stmt.setLong(3, adID);
+            } else if (newAd.title() != null) {
+                query = "UPDATE ads SET title = ? WHERE id = ?";
+                stmt = connection.prepareStatement(query);
+                stmt.setString(1, newAd.title());
+                stmt.setLong(2, adID);
+            } else if (newAd.description() != null) {
+                query = "UPDATE ads SET description = ? WHERE id = ?";
+                stmt = connection.prepareStatement(query);
+                stmt.setString(1, newAd.description());
+                stmt.setLong(2, adID);
+            }
+            if (stmt != null)
+                stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating ad", e);
+        }
+    }
+
+    @Override
     public void update(Long adID, String title, String description) {
         String query = "UPDATE ads SET title = ?, description = ? WHERE id = ?";
         try {
@@ -199,6 +230,40 @@ public class MySQLAdsDao implements Ads {
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error updating ad description", e);
+        }
+    }
+
+    @Override
+    public void updateCategories(Long adId, List<Long> catsOld,
+                                 List<Long> catsNew) {
+        Collection<Long> diff = CollectionUtils.disjunction(catsOld, catsNew);
+        String removeQuery = "DELETE FROM ad_category WHERE ad_id = ? AND category_id = ?";
+        String addQuery = "INSERT INTO ad_category (ad_id, category_id) VALUES (? , ?)";
+        try {
+            for (Long catID : diff) {
+                if (catsOld.contains(catID)) {
+                    PreparedStatement stmt = connection.prepareStatement(removeQuery);
+                    stmt.setLong(1, adId);
+                    stmt.setLong(2, catID);
+                    stmt.execute();
+                }
+                else {
+                    PreparedStatement stmt = connection.prepareStatement(addQuery);
+                    stmt.setLong(1, adId);
+                    stmt.setLong(2, catID);
+                    stmt.executeUpdate();
+                }
+            }
+            for (Long catID : catsNew) {
+                if (!diff.contains(catID)) {
+                    PreparedStatement stmt = connection.prepareStatement(addQuery);
+                    stmt.setLong(1, adId);
+                    stmt.setLong(2, catID);
+                    stmt.executeUpdate();
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating ad categories", e);
         }
     }
 

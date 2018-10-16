@@ -34,12 +34,12 @@ public class AdsServlet extends HttpServlet {
         session.setAttribute("ads", ads);
 
         Integer page = (Integer)session.getAttribute("page");
-        int pages = (int)Math.ceil((double)(ads.size() / resultsPerPage));
+        int pages = (int)Math.ceil((double)ads.size() / (double)resultsPerPage);
         page = page == null || page > pages ? 1 : page;
         int start = (page - 1) * resultsPerPage;
 
-        session.setAttribute("pagedResults", ads.subList(start,
-                (start + resultsPerPage) > ads.size() ? ads.size() : start + resultsPerPage));
+        List<Ad> pagedResults = ads.size() != 0 ? ads.subList(start, (start + resultsPerPage) > ads.size() ? ads.size() : start + resultsPerPage) : new ArrayList<>();
+        session.setAttribute("pagedResults", pagedResults);
         session.setAttribute("pages", pages);
         session.setAttribute("page", page);
         int last;
