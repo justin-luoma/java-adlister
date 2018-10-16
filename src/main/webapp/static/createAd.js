@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }).then(response => response.ok ? response.json(): new Error(response.statusCode))
                 .then(json => {
                     console.log(json);
-                    json.errors ? new Error(json) : window.location = `/ad/${json.success}`
+                    json.errors ? new Error(json) : window.location = `/profile/ad/${json.success}`
                 })
                 .catch(error => console.log(error));
         });

@@ -18,7 +18,10 @@ $('#confirmDeleteModal').on('show.bs.modal', function (event) {
     modal.find('#id').text(adID);
 });
 
-document.getElementById("adDeleteBtn").addEventListener("click", () => {
+const adDelBtn = document.getElementById("adDeleteBtn");
+
+if (adDelBtn !== null)
+    adDelBtn.addEventListener("click", () => {
     const id = document.getElementById("id").innerText;
     fetch("/profile/ads", {
         "method": "post",
@@ -29,6 +32,6 @@ document.getElementById("adDeleteBtn").addEventListener("click", () => {
         .catch(error => console.error(error))
         .then(() => {
             $('#confirmDeleteModal').modal('hide');
-            location.reload();
+            window.location = "/profile/ads";
         });
 });

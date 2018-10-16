@@ -2,7 +2,7 @@
 
 const generateResult = (data) => {
     const resultsDiv = document.getElementById("searchResults");
-    html = "";
+    let html = "";
     if (data === null) {
         resultsDiv.innerHTML = "";
         return;

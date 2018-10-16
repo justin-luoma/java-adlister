@@ -76,6 +76,19 @@ public class MySQLAdCategoryDao implements AdCategories {
         }
     }
 
+    @Override
+    public Boolean delete(Long adID, Long categoryID) {
+        String query = "DELETE FROM ad_category WHERE ad_id = ? AND category_id = ?";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setLong(1, adID);
+            stmt.setLong(2, categoryID);
+            return stmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error deleting ad_category", e);
+        }
+    }
+
     private AdCategory extractAdCategory(ResultSet rs) throws SQLException {
         return new AdCategory(
                 rs.getLong("ad_id"),

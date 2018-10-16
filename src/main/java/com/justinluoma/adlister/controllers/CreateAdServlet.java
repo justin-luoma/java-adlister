@@ -1,6 +1,9 @@
 package com.justinluoma.adlister.controllers;
 
+import com.justinluoma.adlister.controllers.util.InvalidAdException;
 import com.justinluoma.adlister.controllers.util.Json;
+import com.justinluoma.adlister.controllers.util.ValidateAd;
+import com.justinluoma.adlister.controllers.util.ValidateCategories;
 import com.justinluoma.adlister.dao.DaoFactory;
 import com.justinluoma.adlister.models.Ad;
 import com.justinluoma.adlister.models.Category;
@@ -34,22 +37,18 @@ public class CreateAdServlet extends HttpServlet {
             PrintWriter out = response.getWriter();
             response.setContentType("application/json");
 
-            if (title == null || description == null || categories == null) {
-                out.println(DaoFactory.gson.toJson(Json.gen(new String[] {"errors"}, "invalid data")));
+            boolean valid;
+            try {
+                valid = ValidateAd.validate(title, description, categories);
+            } catch (InvalidAdException e) {
+                valid = false;
+                out.println(e.getMessage());
                 out.flush();
-            } else if (title.length() < 5) {
-                out.println(DaoFactory.gson.toJson(Json.gen(new String[] {"errors", "title"}, true, "title too short")));
-                out.flush();
-            } else if (description.length() < 15) {
-                out.println(DaoFactory.gson.toJson(Json.gen(new String[] {"errors", "description"}, true, "description too short")));
-                out.flush();
-            } else if (categories.length < 1) {
-                out.println(DaoFactory.gson.toJson(Json.gen(new String[] {"errors", "categories"}, true, "must be at least one category")));
-                out.flush();
-            } else if (DaoFactory.getAdsDao().testUniqueTitle(title)) {
-                out.println(DaoFactory.gson.toJson(Json.gen(new String[] {"errors", "categories"}, true, "title must be unique")));
-                out.flush();
-            } else {
+            }
+
+            valid = ValidateCategories.validate(categories) && valid;
+
+            if (valid) {
                 long adID = DaoFactory.getAdsDao().insert(
                         new Ad(
                                 user.id(),
@@ -65,6 +64,9 @@ public class CreateAdServlet extends HttpServlet {
                     }
                 }
                 out.println(DaoFactory.gson.toJson(Json.gen(new String[] {"errors", "success"}, false, adID)));
+                out.flush();
+            } else {
+                out.println(DaoFactory.gson.toJson(Json.gen(new String[] {"errors", "success"}, true)));
                 out.flush();
             }
         }

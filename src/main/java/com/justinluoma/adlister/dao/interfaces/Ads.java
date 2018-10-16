@@ -15,4 +15,7 @@ public interface Ads {
     Long insert(Ad ad);
     Boolean delete(Long userID, Long adID);
     Boolean testUniqueTitle(String title);
+    void update(Long adID, String title, String description);
+    void updateTitle(Long adID, String title);
+    void updateDescription(Long adID, String description);
 }

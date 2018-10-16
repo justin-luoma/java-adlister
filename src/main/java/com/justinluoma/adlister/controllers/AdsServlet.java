@@ -29,11 +29,7 @@ public class AdsServlet extends HttpServlet {
 
         session.setAttribute("redirect", "/ads");
 
-        List<Ad> ads;
-        if (session.getAttribute("ads") instanceof List && ((List) session.getAttribute("ads")).get(0) instanceof Ad)
-            ads = (List<Ad>)session.getAttribute("ads");
-        else
-            ads = DaoFactory.getAdsDao().all();
+        List<Ad> ads = DaoFactory.getAdsDao().all();
 
         session.setAttribute("ads", ads);
 
