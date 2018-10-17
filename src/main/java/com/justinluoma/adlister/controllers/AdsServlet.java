@@ -29,7 +29,18 @@ public class AdsServlet extends HttpServlet {
 
         session.setAttribute("redirect", "/ads");
 
-        List<Ad> ads = DaoFactory.getAdsDao().all();
+        List<Ad> ads;
+
+        String category = request.getParameter("category");
+        if (category == null || category.isEmpty()) {
+            ads = DaoFactory.getAdsDao().all();
+        } else {
+            try {
+                ads = DaoFactory.getAdsDao().getByCategory(Long.valueOf(category));
+            } catch (NumberFormatException e) {
+                ads = DaoFactory.getAdsDao().all();
+            }
+        }
 
         session.setAttribute("ads", ads);
 

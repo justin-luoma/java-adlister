@@ -149,7 +149,14 @@ public class MySQLAdsDao implements Ads {
 
     @Override
     public List<Ad> getByCategory(Long categoryID) {
-        return null;
+        String query = "SELECT a.* FROM ad_category ac JOIN ads a ON ac.ad_id = a.id WHERE ac.category_id = ? ORDER BY a.created DESC";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setLong(1, categoryID);
+            return createAdsFromResults(stmt.executeQuery());
+        } catch (SQLException e) {
+            throw new RuntimeException("Error get ads by category", e);
+        }
     }
 
     @Override

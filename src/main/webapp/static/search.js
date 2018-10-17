@@ -39,6 +39,13 @@ const searchHandler = event => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
+    const navbarBgColor = tinycolor(document.getElementById("navbar").style.backgroundColor);
+    const searchIcon = document.getElementById("searchIcon");
+    if (navbarBgColor.isDark) {
+        searchIcon.style.color = "white";
+    } else {
+        searchIcon.style.color = "#222";
+    }
     document.getElementById("searchInput").addEventListener('input', searchHandler);
     $('#searchModal').on('shown.bs.modal', function (e) {
         $('#searchInput').trigger('focus');

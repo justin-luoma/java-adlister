@@ -9,4 +9,7 @@ public interface Users {
     User findByEmail(String email);
     User getByID(long id);
     Long insert(User user) throws SQLException;
+    void updateUsername(Long id, String username) throws SQLException;
+    void updateEmail(Long id, String email) throws SQLException;
+    void updatePassword(Long id, String hash) throws SQLException;
 }

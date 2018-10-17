@@ -18,15 +18,12 @@
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="ads">Ads <span class="caret"></span></a>
-                    <div class="dropdown-menu" aria-labelledby="ads">
+                    <div class="dropdown-menu" id="adsMenu" aria-labelledby="ads">
                         <a class="dropdown-item not-logged-in" href="/profile/ads">My Listings</a>
                         <a class="dropdown-item not-logged-in" href="/create">Create New Listing</a>
                         <div class="dropdown-divider not-logged-in"></div>
                         <a class="dropdown-item" href="/ads">View All</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="">Furniture</a>
-                        <a class="dropdown-item" href="">Video Games</a>
-                        <a class="dropdown-item" href="">Appliances</a>
 
                     </div>
                 </li>
@@ -99,6 +96,10 @@
     </div>
 </div>
 
+<script src="/static/tinycolor-min.js" ></script>
+
 <span class="material-icons position-absolute d-md-none" id="searchIcon">search</span>
 
 <jsp:include page="/WEB-INF/assests/search.jsp" />
+
+<script src="/static/categories.js" ></script>

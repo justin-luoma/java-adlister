@@ -12,6 +12,9 @@
 <%@ include file="/WEB-INF/navbar/navbar.jsp" %>
 
 <div class="container" id="content">
+    <c:if test="${sessionScope.pagedResults.size() == 0}" >
+        <h2>No listings.</h2>
+    </c:if>
     <c:forEach var="ad" items="${sessionScope.pagedResults}">
             <div class="card mt-1">
                 <div class="card-body">
