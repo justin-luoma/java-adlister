@@ -18,17 +18,6 @@ public class Ad implements Comparable<Ad> {
     public Ad() {
     }
 
-//    public Ad(long id, long createdBy, String title, String description,
-//              Timestamp created, String... categories) {
-//        this.id = id;
-//        this.createdBy = createdBy;
-//        this.title = title;
-//        this.description = description;
-//        this.created = created.toLocalDateTime();
-//        this.categories = Arrays.asList(categories);
-//        Collections.sort(this.categories);
-//    }
-
     public Ad(long id, long createdBy, String title, String description,
               Timestamp created, List<String> categories) {
         this.id = id;

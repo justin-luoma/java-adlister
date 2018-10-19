@@ -71,7 +71,9 @@
         display: list-item !important;
     }
 }
-
+.imgW {
+    max-width: 360px!important;
+}
  /*Large devices (desktops, 992px and up)*/
 @media (min-width: 992px) { }
 
